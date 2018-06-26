@@ -7,8 +7,8 @@ import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 import android.util.Log;
 
-@Database(entities = {Journal.class}, version = 1, exportSchema = false)
-@TypeConverters(DateConverter.class)
+@Database(entities = {Journal.class}, version = 2, exportSchema = false)
+@TypeConverters({DateConverter.class})
 public abstract class AppDatabase extends RoomDatabase {
 
     private static final String TAG = AppDatabase.class.getSimpleName();

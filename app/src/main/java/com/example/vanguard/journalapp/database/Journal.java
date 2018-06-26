@@ -17,9 +17,6 @@ public class Journal {
     private Date updated_at;
 
     @Ignore
-    private String summary;
-
-    @Ignore
     public Journal(String title, String content, Date updated_at) {
         this.title = title;
         this.content = content;
@@ -71,13 +68,5 @@ public class Journal {
 
     public void setUpdated_at(Date updated_at) {
         this.updated_at = updated_at;
-    }
-
-    public String getSummary() {
-        return summary;
-    }
-
-    public void setSummary(String summary) {
-        this.summary = summary;
     }
 }

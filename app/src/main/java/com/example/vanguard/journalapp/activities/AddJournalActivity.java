@@ -1,25 +1,26 @@
-package com.example.vanguard.journalapp;
+package com.example.vanguard.journalapp.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.example.vanguard.journalapp.R;
 import com.example.vanguard.journalapp.database.AppDatabase;
 import com.example.vanguard.journalapp.database.Journal;
 
 import java.util.Date;
 
-public class MainActivity extends AppCompatActivity {
+public class AddJournalActivity extends AppCompatActivity {
 
     private AppDatabase mDb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_add_journal);
 
         mDb = AppDatabase.getInstance(getApplicationContext());
 
-        //saving dummy data
+        // saving dummy data
         String title = "My first journal";
         String content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sed eleifend justo."
                 + " Vestibulum semper ac neque eu egestas. Nam nulla est, finibus nec facilisis sit amet,"
@@ -29,8 +30,5 @@ public class MainActivity extends AppCompatActivity {
 
         Journal journal = new Journal(title, content, created_at);
         mDb.journalDao().insertJournal(journal);
-
-        System.out.println("done");
-
     }
 }
