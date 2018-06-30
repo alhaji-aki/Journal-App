@@ -9,6 +9,7 @@ import android.widget.EditText;
 import com.example.vanguard.journalapp.R;
 import com.example.vanguard.journalapp.database.AppDatabase;
 import com.example.vanguard.journalapp.database.Journal;
+import com.example.vanguard.journalapp.executors.AppExecutors;
 
 import java.util.Date;
 
@@ -47,8 +48,14 @@ public class AddJournalActivity extends AppCompatActivity {
         String content = mContentEditText.getText().toString();
         Date created_at = new Date();
 
-        Journal journal = new Journal(title, content, created_at);
-        mDb.journalDao().insertJournal(journal);
-        finish();
+        final Journal journal = new Journal(title, content, created_at);
+
+        AppExecutors.getsInstance().getDiskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDb.journalDao().insertJournal(journal);
+                finish();
+            }
+        });
     }
 }

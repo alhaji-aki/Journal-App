@@ -13,6 +13,10 @@ import android.view.View;
 import com.example.vanguard.journalapp.R;
 import com.example.vanguard.journalapp.adapters.JournalsAdapter;
 import com.example.vanguard.journalapp.database.AppDatabase;
+import com.example.vanguard.journalapp.database.Journal;
+import com.example.vanguard.journalapp.executors.AppExecutors;
+
+import java.util.List;
 
 import static android.support.v7.widget.DividerItemDecoration.VERTICAL;
 
@@ -69,7 +73,18 @@ public class MainActivity extends AppCompatActivity implements JournalsAdapter.I
     @Override
     protected void onResume() {
         super.onResume();
-        mAdapter.setJournals(mDb.journalDao().loadAllJournals());
+        AppExecutors.getsInstance().getDiskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                final List<Journal> journals = mDb.journalDao().loadAllJournals();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mAdapter.setJournals(journals);
+                    }
+                });
+            }
+        });
     }
 
     @Override
