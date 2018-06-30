@@ -46,12 +46,11 @@ public class JournalsAdapter extends RecyclerView.Adapter<JournalsAdapter.Journa
         Journal journal = mJournals.get(position);
         String title = journal.getTitle();
         String summary = journal.getContent();
-        System.out.println(journal.getCreated_at());
-        //String created_at = dateFormat.format(journal.getCreated_at());
+        String created_at = dateFormat.format(journal.getCreatedAt());
 
         //Set values
         holder.titleView.setText(title);
-        //holder.createdAtView.setText(created_at);
+        holder.createdAtView.setText(created_at);
         holder.summaryView.setText(summary);
     }
 
@@ -78,11 +77,12 @@ public class JournalsAdapter extends RecyclerView.Adapter<JournalsAdapter.Journa
         TextView createdAtView;
         TextView summaryView;
 
-        public JournalViewHolder(View itemView) {
+        JournalViewHolder(View itemView) {
             super(itemView);
             this.titleView = itemView.findViewById(R.id.title_textview);
             this.createdAtView = itemView.findViewById(R.id.date_textview);
             this.summaryView = itemView.findViewById(R.id.summary_textview);
+            itemView.setOnClickListener(this);
         }
 
         @Override

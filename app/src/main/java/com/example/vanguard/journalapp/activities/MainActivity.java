@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements JournalsAdapter.I
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerViewJournals);
+        mRecyclerView = findViewById(R.id.recyclerViewJournals);
         mRecyclerView.setHasFixedSize(true);
 
         // setting the layout
@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements JournalsAdapter.I
         }).attachToRecyclerView(mRecyclerView);
 
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

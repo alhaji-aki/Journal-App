@@ -2,4 +2,7 @@
     <string name="app_name">Journal App</string>
     <string name="title_activity_main">Journals</string>
     <string name="title_add_journal">Add Journal</string>
+    <string name="save">Save</string>
+    <string name="what_s_on_your_mind">What\'s on your mind?</string>
+    <string name="title">Title</string>
 </resources>
