@@ -52,8 +52,16 @@ public class MainActivity extends AppCompatActivity implements JournalsAdapter.I
 
             // Called when a user swipes left or right on a ViewHolder
             @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
-                // Here is where you'll implement swipe to delete
+            public void onSwiped(final RecyclerView.ViewHolder viewHolder, int swipeDir) {
+                AppExecutors.getsInstance().getDiskIO().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        int position = viewHolder.getAdapterPosition();
+                        List<Journal> journals = mAdapter.getJournals();
+                        mDb.journalDao().deleteJournal(journals.get(position));
+                        retrieveJournals();
+                    }
+                });
             }
         }).attachToRecyclerView(mRecyclerView);
 
@@ -70,9 +78,7 @@ public class MainActivity extends AppCompatActivity implements JournalsAdapter.I
         mDb = AppDatabase.getInstance(getApplicationContext());
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
+    private void retrieveJournals() {
         AppExecutors.getsInstance().getDiskIO().execute(new Runnable() {
             @Override
             public void run() {
@@ -85,6 +91,12 @@ public class MainActivity extends AppCompatActivity implements JournalsAdapter.I
                 });
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        retrieveJournals();
     }
 
     @Override

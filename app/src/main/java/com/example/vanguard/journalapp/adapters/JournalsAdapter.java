@@ -68,6 +68,10 @@ public class JournalsAdapter extends RecyclerView.Adapter<JournalsAdapter.Journa
         notifyDataSetChanged();
     }
 
+    public List<Journal> getJournals() {
+        return mJournals;
+    }
+
     public interface ItemClickListener {
         void onItemClickListener(int itemId);
     }
