@@ -1,5 +1,6 @@
 package com.example.vanguard.journalapp.database;
 
+import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
@@ -13,21 +14,25 @@ public class Journal {
     private int id;
     private String title;
     private String content;
-    private Date created_at;
-    private Date updated_at;
+
+    @ColumnInfo(name = "created_at")
+    private Date createdAt;
+
+    @ColumnInfo(name = "updatedAt")
+    private Date updatedAt;
 
     @Ignore
-    public Journal(String title, String content, Date updated_at) {
+    public Journal(String title, String content, Date createdAt) {
         this.title = title;
         this.content = content;
-        this.updated_at = updated_at;
+        this.createdAt = createdAt;
     }
 
-    public Journal(int id, String title, String content, Date created_at) {
+    Journal(int id, String title, String content, Date updatedAt) {
         this.id = id;
         this.title = title;
         this.content = content;
-        this.created_at = created_at;
+        this.updatedAt = updatedAt;
     }
 
     public int getId() {
@@ -54,19 +59,19 @@ public class Journal {
         this.content = content;
     }
 
-    public Date getCreated_at() {
-        return created_at;
+    public Date getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreated_at(Date created_at) {
-        this.created_at = created_at;
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 
-    public Date getUpdated_at() {
-        return updated_at;
+    public Date getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setUpdated_at(Date updated_at) {
-        this.updated_at = updated_at;
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }
