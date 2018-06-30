@@ -15,7 +15,7 @@
         android:id="@+id/date_textview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:text="@tools:sample/date/mmddyy" />
+        tools:text="@tools:sample/date/ddmmyy" />
 
     <TextView
         android:id="@+id/summary_textview"

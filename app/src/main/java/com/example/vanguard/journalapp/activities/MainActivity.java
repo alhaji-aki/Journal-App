@@ -101,6 +101,8 @@ public class MainActivity extends AppCompatActivity implements JournalsAdapter.I
 
     @Override
     public void onItemClickListener(int itemId) {
-        //Launch ReadJournalTaskActivity with itemid as an extra intent
+        Intent intent = new Intent(MainActivity.this, ReadJournalActivity.class);
+        intent.putExtra(ReadJournalActivity.EXTRA_JOURNAL_ID, itemId);
+        startActivity(intent);
     }
 }

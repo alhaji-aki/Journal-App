@@ -45,6 +45,7 @@ public class JournalsAdapter extends RecyclerView.Adapter<JournalsAdapter.Journa
     public void onBindViewHolder(@NonNull JournalsAdapter.JournalViewHolder holder, int position) {
         Journal journal = mJournals.get(position);
         String title = journal.getTitle();
+        //TODO Implement a summary function to summarize journal's content
         String summary = journal.getContent();
         String created_at = dateFormat.format(journal.getCreatedAt());
 
