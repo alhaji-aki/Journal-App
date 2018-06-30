@@ -1,8 +1,13 @@
 package com.example.vanguard.journalapp.activities;
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -10,6 +15,8 @@ import android.widget.TextView;
 import com.example.vanguard.journalapp.R;
 import com.example.vanguard.journalapp.database.AppDatabase;
 import com.example.vanguard.journalapp.database.Journal;
+import com.example.vanguard.journalapp.database.JournalViewModel;
+import com.example.vanguard.journalapp.database.JournalViewModelFactory;
 import com.example.vanguard.journalapp.executors.AppExecutors;
 
 import java.text.SimpleDateFormat;
@@ -19,6 +26,7 @@ public class ReadJournalActivity extends AppCompatActivity {
 
     // Constant for date format
     private static final String DATE_FORMAT = "dd/MM/yyy";
+    private static final String TAG = ReadJournalActivity.class.getSimpleName();
 
     public static final String EXTRA_JOURNAL_ID = "extraJournalId";
     private static final int DEFAULT_JOURNAL_ID = -1;
@@ -48,16 +56,14 @@ public class ReadJournalActivity extends AppCompatActivity {
             if (mJournalId == DEFAULT_JOURNAL_ID){
                 mJournalId = intent.getIntExtra(EXTRA_JOURNAL_ID, DEFAULT_JOURNAL_ID);
 
-                AppExecutors.getsInstance().getDiskIO().execute(new Runnable() {
+                JournalViewModelFactory factory = new JournalViewModelFactory(mDb, mJournalId);
+                final JournalViewModel viewModel = ViewModelProviders.of(this, factory).get(JournalViewModel.class);
+
+                viewModel.getJournal().observe(this, new Observer<Journal>() {
                     @Override
-                    public void run() {
-                        final Journal journal = mDb.journalDao().getJournal(mJournalId);
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                populateUI(journal);
-                            }
-                        });
+                    public void onChanged(@Nullable Journal journal) {
+                        viewModel.getJournal().removeObserver(this);
+                        populateUI(journal);
                     }
                 });
             }
@@ -84,14 +90,15 @@ public class ReadJournalActivity extends AppCompatActivity {
     }
 
     private void populateUI(Journal journal) {
-        if (journal == null){
+        if (journal != null) {
+            mTitleTextView.setText(journal.getTitle());
+            mDateTextView.setText(dateFormat.format(journal.getCreatedAt()));
+            mContentTextView.setText(journal.getContent());
+        }else {
             Intent intent = new Intent(ReadJournalActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
         }
 
-        mTitleTextView.setText(journal.getTitle());
-        mDateTextView.setText(dateFormat.format(journal.getCreatedAt()));
-        mContentTextView.setText(journal.getContent());
     }
 }

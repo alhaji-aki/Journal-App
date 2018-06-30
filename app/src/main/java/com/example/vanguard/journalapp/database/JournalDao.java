@@ -1,5 +1,6 @@
 package com.example.vanguard.journalapp.database;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
@@ -13,10 +14,10 @@ import java.util.List;
 public interface JournalDao {
 
     @Query("SELECT * FROM journals ORDER BY created_at;")
-    List<Journal> loadAllJournals();
+    LiveData<List<Journal>> loadAllJournals();
 
     @Query("SELECT * FROM journals WHERE id == :id")
-    Journal getJournal(int id);
+    LiveData<Journal> getJournal(int id);
 
     @Insert
     void insertJournal(Journal journal);

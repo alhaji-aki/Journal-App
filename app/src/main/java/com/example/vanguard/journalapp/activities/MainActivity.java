@@ -1,19 +1,24 @@
 package com.example.vanguard.journalapp.activities;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.View;
 
 import com.example.vanguard.journalapp.R;
 import com.example.vanguard.journalapp.adapters.JournalsAdapter;
 import com.example.vanguard.journalapp.database.AppDatabase;
 import com.example.vanguard.journalapp.database.Journal;
+import com.example.vanguard.journalapp.database.MainViewModel;
 import com.example.vanguard.journalapp.executors.AppExecutors;
 
 import java.util.List;
@@ -22,6 +27,7 @@ import static android.support.v7.widget.DividerItemDecoration.VERTICAL;
 
 public class MainActivity extends AppCompatActivity implements JournalsAdapter.ItemClickListener {
 
+    private static final String TAG = MainActivity.class.getSimpleName();
     private RecyclerView mRecyclerView;
     private JournalsAdapter mAdapter;
 
@@ -59,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements JournalsAdapter.I
                         int position = viewHolder.getAdapterPosition();
                         List<Journal> journals = mAdapter.getJournals();
                         mDb.journalDao().deleteJournal(journals.get(position));
-                        retrieveJournals();
+                        settingUpViewModel();
                     }
                 });
             }
@@ -76,27 +82,18 @@ public class MainActivity extends AppCompatActivity implements JournalsAdapter.I
         });
 
         mDb = AppDatabase.getInstance(getApplicationContext());
+        settingUpViewModel();
     }
 
-    private void retrieveJournals() {
-        AppExecutors.getsInstance().getDiskIO().execute(new Runnable() {
+    private void settingUpViewModel() {
+        MainViewModel viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+        viewModel.getJournals().observe(this, new Observer<List<Journal>>() {
             @Override
-            public void run() {
-                final List<Journal> journals = mDb.journalDao().loadAllJournals();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mAdapter.setJournals(journals);
-                    }
-                });
+            public void onChanged(@Nullable List<Journal> journals) {
+                Log.d(TAG, "Updating list of tasks from LiveData in ViewModel");
+                mAdapter.setJournals(journals);
             }
         });
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        retrieveJournals();
     }
 
     @Override
