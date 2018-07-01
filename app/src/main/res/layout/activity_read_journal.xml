@@ -31,8 +31,8 @@
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"
-        android:layout_height="340dp"
-        app:layout_constraintBottom_toTopOf="@+id/btn_update"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/date_textview">
@@ -45,17 +45,5 @@
             android:textSize="15sp"
             tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sed eleifend justo. Vestibulum semper ac neque eu egestas. Nam nulla est, finibus nec facilisis sit amet, commodo quis odio. Sed ligula nibh, pretium eu cursus non, viverra quis nulla. Aliquam iaculis dignissim metus, eu pretium tortor efficitur at." />
     </ScrollView>
-
-    <Button
-        android:id="@+id/btn_update"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="13dp"
-        android:text="@string/update"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
 
 </android.support.constraint.ConstraintLayout>

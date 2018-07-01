@@ -12,6 +12,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.example.vanguard.journalapp.R;
@@ -20,6 +22,8 @@ import com.example.vanguard.journalapp.database.AppDatabase;
 import com.example.vanguard.journalapp.database.Journal;
 import com.example.vanguard.journalapp.database.MainViewModel;
 import com.example.vanguard.journalapp.executors.AppExecutors;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
 
@@ -33,10 +37,23 @@ public class MainActivity extends AppCompatActivity implements JournalsAdapter.I
 
     private AppDatabase mDb;
 
+    private FirebaseAuth mAuth;
+    private FirebaseUser mUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mAuth = FirebaseAuth.getInstance();
+        mUser = mAuth.getCurrentUser();
+
+        if (mUser == null){
+            Intent intent = new Intent(MainActivity.this, SignInActivity.class);
+            startActivity(intent);
+            finish();
+            return;
+        }
 
         mRecyclerView = findViewById(R.id.recyclerViewJournals);
         mRecyclerView.setHasFixedSize(true);
@@ -85,6 +102,32 @@ public class MainActivity extends AppCompatActivity implements JournalsAdapter.I
         settingUpViewModel();
     }
 
+    @Override
+    public void onItemClickListener(int itemId) {
+        Intent intent = new Intent(MainActivity.this, ReadJournalActivity.class);
+        intent.putExtra(ReadJournalActivity.EXTRA_JOURNAL_ID, itemId);
+        startActivity(intent);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_layout_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int i = item.getItemId();
+        if (i == R.id.logout_item) {
+            FirebaseAuth.getInstance().signOut();
+            startActivity(new Intent(this, SignInActivity.class));
+            finish();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
     private void settingUpViewModel() {
         MainViewModel viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
         viewModel.getJournals().observe(this, new Observer<List<Journal>>() {
@@ -94,12 +137,5 @@ public class MainActivity extends AppCompatActivity implements JournalsAdapter.I
                 mAdapter.setJournals(journals);
             }
         });
-    }
-
-    @Override
-    public void onItemClickListener(int itemId) {
-        Intent intent = new Intent(MainActivity.this, ReadJournalActivity.class);
-        intent.putExtra(ReadJournalActivity.EXTRA_JOURNAL_ID, itemId);
-        startActivity(intent);
     }
 }

@@ -1,15 +1,13 @@
 package com.example.vanguard.journalapp.activities;
 
-import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.EditText;
 
 import com.example.vanguard.journalapp.R;
@@ -18,6 +16,7 @@ import com.example.vanguard.journalapp.database.Journal;
 import com.example.vanguard.journalapp.database.JournalViewModel;
 import com.example.vanguard.journalapp.database.JournalViewModelFactory;
 import com.example.vanguard.journalapp.executors.AppExecutors;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Date;
 
@@ -27,7 +26,6 @@ public class AddJournalActivity extends AppCompatActivity {
     private static final int DEFAULT_JOURNAL_ID = -1;
     private AppDatabase mDb;
     private EditText mTitleEditText, mContentEditText;
-    private Button mSaveButton;
 
     public static final String EXTRA_JOURNAL_ID = "extraJournalId";
     private static final String INSTANCE_JOURNAL_ID = "instanceJournalId";
@@ -50,7 +48,6 @@ public class AddJournalActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra(EXTRA_JOURNAL_ID)){
-            mSaveButton.setText(R.string.update);
             if (mJournalId == DEFAULT_JOURNAL_ID){
                 mJournalId = intent.getIntExtra(EXTRA_JOURNAL_ID, DEFAULT_JOURNAL_ID);
 
@@ -74,6 +71,28 @@ public class AddJournalActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.add_journal_layout_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int i = item.getItemId();
+        if (i == R.id.logout_item) {
+            FirebaseAuth.getInstance().signOut();
+            startActivity(new Intent(this, SignInActivity.class));
+            finish();
+            return true;
+        } else if (i == R.id.add_journal_action){
+            onSaveMenuItemClicked();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
     private void populateUI(Journal journal) {
         if (journal == null){
             return;
@@ -86,17 +105,9 @@ public class AddJournalActivity extends AppCompatActivity {
     private void initViews() {
         mTitleEditText = findViewById(R.id.title_edit_text);
         mContentEditText = findViewById(R.id.content_edit_text);
-        mSaveButton = findViewById(R.id.btn_save);
-
-        mSaveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onSaveButtonClicked();
-            }
-        });
     }
 
-    private void onSaveButtonClicked() {
+    private void onSaveMenuItemClicked() {
         String title = mTitleEditText.getText().toString();
         String content = mContentEditText.getText().toString();
         Date created_at = new Date();
