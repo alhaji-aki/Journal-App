@@ -10,8 +10,10 @@ import android.widget.TextView;
 
 import com.example.vanguard.journalapp.R;
 import com.example.vanguard.journalapp.database.Journal;
+import com.example.vanguard.journalapp.utilities.JournalAppUtilities;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -45,14 +47,22 @@ public class JournalsAdapter extends RecyclerView.Adapter<JournalsAdapter.Journa
     public void onBindViewHolder(@NonNull JournalsAdapter.JournalViewHolder holder, int position) {
         Journal journal = mJournals.get(position);
         String title = journal.getTitle();
-        //TODO Implement a summary function to summarize journal's content
-        String summary = journal.getContent();
-        String created_at = dateFormat.format(journal.getCreatedAt());
+        String content = journal.getContent();
 
-        //Set values
-        holder.titleView.setText(title);
-        holder.createdAtView.setText(created_at);
-        holder.summaryView.setText(summary);
+        if (title.equals("")){
+            holder.titleView.setVisibility(View.GONE);
+            holder.summaryView.setMaxLines(4);
+        }else {
+            holder.titleView.setText(title);
+        }
+
+        String createdAtString = JournalAppUtilities.getFriendlyDateString(mContext,
+                journal.getCreatedAt().getTime(), true);
+
+        String dateText = mContext.getString(R.string.today, createdAtString);
+        holder.createdAtView.setText(dateText);
+
+        holder.summaryView.setText(content);
     }
 
     @Override

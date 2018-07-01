@@ -64,9 +64,6 @@ public class MainActivity extends AppCompatActivity implements JournalsAdapter.I
         mAdapter = new JournalsAdapter(this, this);
         mRecyclerView.setAdapter(mAdapter);
 
-        DividerItemDecoration decoration = new DividerItemDecoration(getApplicationContext(), VERTICAL);
-        mRecyclerView.addItemDecoration(decoration);
-
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
@@ -82,7 +79,6 @@ public class MainActivity extends AppCompatActivity implements JournalsAdapter.I
                         int position = viewHolder.getAdapterPosition();
                         List<Journal> journals = mAdapter.getJournals();
                         mDb.journalDao().deleteJournal(journals.get(position));
-                        settingUpViewModel();
                     }
                 });
             }
@@ -133,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements JournalsAdapter.I
         viewModel.getJournals().observe(this, new Observer<List<Journal>>() {
             @Override
             public void onChanged(@Nullable List<Journal> journals) {
-                Log.d(TAG, "Updating list of tasks from LiveData in ViewModel");
+                Log.d(TAG, "Updating list of journals from LiveData in ViewModel");
                 mAdapter.setJournals(journals);
             }
         });

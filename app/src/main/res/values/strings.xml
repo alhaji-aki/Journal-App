@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:xliff="http://schemas.android.com/apk/res-auto">
     <string name="app_name">My Thoughts</string>
     <string name="title_activity_main">Journals</string>
     <string name="title_add_journal">Add Journal</string>
@@ -8,4 +8,12 @@
     <string name="edit">Edit</string>
     <string name="my_thoughts_logo">My Thoughts Logo</string>
     <string name="logout">Logout</string>
+
+    <!-- Date format -->
+    <string name="format_full_friendly_date">
+        <xliff:g id="month">%1$s</xliff:g>, <xliff:g id="day">%2$s</xliff:g> <xliff:g id="year">%3$s</xliff:g>
+    </string>
+
+    <string name="today">Modified: %1$s</string>
+
 </resources>

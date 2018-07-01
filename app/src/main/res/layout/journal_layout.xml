@@ -3,23 +3,38 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@drawable/layout_bg"
+    android:layout_marginTop="10dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:padding="10dp">
 
     <TextView
         android:id="@+id/title_textview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
         tools:text="New Text View" />
+
+
+    <TextView
+        android:id="@+id/summary_textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLines="3"
+        android:ellipsize="end"
+        tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sed eleifend justo. Vestibulum semper ac neque eu egestas. Nam nulla est, finibus nec facilisis sit amet, commodo quis odio. Sed ligula nibh, pretium eu cursus non, viverra quis nulla. Aliquam iaculis dignissim metus, eu pretium tortor efficitur at." />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"/>
 
     <TextView
         android:id="@+id/date_textview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:text="@tools:sample/date/ddmmyy" />
-
-    <TextView
-        android:id="@+id/summary_textview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut sed eleifend justo. Vestibulum semper ac neque eu egestas. Nam nulla est, finibus nec facilisis sit amet, commodo quis odio. Sed ligula nibh, pretium eu cursus non, viverra quis nulla. Aliquam iaculis dignissim metus, eu pretium tortor efficitur at." />
 </LinearLayout>

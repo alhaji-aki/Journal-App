@@ -15,6 +15,7 @@ import com.example.vanguard.journalapp.database.AppDatabase;
 import com.example.vanguard.journalapp.database.Journal;
 import com.example.vanguard.journalapp.database.JournalViewModel;
 import com.example.vanguard.journalapp.database.JournalViewModelFactory;
+import com.example.vanguard.journalapp.utilities.JournalAppUtilities;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.text.SimpleDateFormat;
@@ -104,8 +105,16 @@ public class ReadJournalActivity extends AppCompatActivity {
 
     private void populateUI(Journal journal) {
         if (journal != null) {
-            mTitleTextView.setText(journal.getTitle());
-            mDateTextView.setText(dateFormat.format(journal.getCreatedAt()));
+            if (journal.getTitle().equals("")){
+                mTitleTextView.setHint("No Title");
+            }else {
+                mTitleTextView.setText(journal.getTitle());
+            }
+            String createdAtString = JournalAppUtilities.getFriendlyDateString(this,
+                    journal.getCreatedAt().getTime(), true);
+
+            String dateText = this.getString(R.string.today, createdAtString);
+            mDateTextView.setText(dateText);
             mContentTextView.setText(journal.getContent());
         }else {
             Intent intent = new Intent(ReadJournalActivity.this, MainActivity.class);
